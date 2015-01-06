@@ -2,21 +2,22 @@ namespace FluentValidation.Validators {
 	using System;
 	using System.Linq.Expressions;
 	using System.Threading.Tasks;
+	using JetBrains.Annotations;
 
 	public abstract class AsyncValidatorBase : PropertyValidator {
 		public override bool IsAsync {
 			get { return true; }
 		}
 
-		protected AsyncValidatorBase(string errorMessageResourceName, Type errorMessageResourceType)
+		protected AsyncValidatorBase([NotNull] string errorMessageResourceName, [NotNull] Type errorMessageResourceType)
 			: base(errorMessageResourceName, errorMessageResourceType) {
 		}
 
-		protected AsyncValidatorBase(string errorMessage)
+		protected AsyncValidatorBase([NotNull] string errorMessage)
 			: base(errorMessage) {
 		}
 
-		protected AsyncValidatorBase(Expression<Func<string>> errorMessageResourceSelector)
+		protected AsyncValidatorBase([NotNull] Expression<Func<string>> errorMessageResourceSelector)
 			: base(errorMessageResourceSelector) {
 		}
 

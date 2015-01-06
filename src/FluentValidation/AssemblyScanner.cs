@@ -22,34 +22,39 @@ namespace FluentValidation {
 	using System.Collections.Generic;
 	using System.Linq;
 	using System.Reflection;
+	using JetBrains.Annotations;
 
 	/// <summary>
 	/// Class that can be used to find all the validators from a collection of types.
 	/// </summary>
 	public class AssemblyScanner : IEnumerable<AssemblyScanner.AssemblyScanResult> {
+		[NotNull]
 		readonly IEnumerable<Type> types;
 
 		/// <summary>
 		/// Creates a scanner that works on a sequence of types.
 		/// </summary>
-		public AssemblyScanner(IEnumerable<Type> types) {
+		public AssemblyScanner([NotNull] IEnumerable<Type> types) {
 			this.types = types;
 		}
 
 		/// <summary>
 		/// Finds all the validators in the specified assembly.
 		/// </summary>
-		public static AssemblyScanner FindValidatorsInAssembly(Assembly assembly) {
+		[NotNull]
+		public static AssemblyScanner FindValidatorsInAssembly([NotNull] Assembly assembly) {
 			return new AssemblyScanner(assembly.GetExportedTypes());
 		}
 
 		/// <summary>
 		/// Finds all the validators in the assembly containing the specified type.
 		/// </summary>
+		[NotNull]
 		public static AssemblyScanner FindValidatorsInAssemblyContaining<T>() {
 			return FindValidatorsInAssembly(typeof(T).Assembly);
 		}
 
+		[NotNull]
 		private IEnumerable<AssemblyScanResult> Execute() {
 			var openGenericType = typeof(IValidator<>);
 
@@ -66,7 +71,7 @@ namespace FluentValidation {
 		/// <summary>
 		/// Performs the specified action to all of the assembly scan results.
 		/// </summary>
-		public void ForEach(Action<AssemblyScanResult> action) {
+		public void ForEach([NotNull] Action<AssemblyScanResult> action) {
 			foreach(var result in this) {
 				action(result);
 			}
@@ -94,7 +99,7 @@ namespace FluentValidation {
 			/// <summary>
 			/// Creates an instance of an AssemblyScanResult.
 			/// </summary>
-			public AssemblyScanResult(Type interfaceType, Type validatorType) {
+			public AssemblyScanResult([NotNull] Type interfaceType, [NotNull] Type validatorType) {
 				InterfaceType = interfaceType;
 				ValidatorType = validatorType;
 			}
@@ -102,10 +107,12 @@ namespace FluentValidation {
 			/// <summary>
 			/// Validator interface type, eg IValidator&lt;Foo&gt;
 			/// </summary>
+			[NotNull]
 			public Type InterfaceType { get; private set; }
 			/// <summary>
 			/// Concrete type that implements the InterfaceType, eg FooValidator.
 			/// </summary>
+			[NotNull]
 			public Type ValidatorType { get; private set; }
 		}
 

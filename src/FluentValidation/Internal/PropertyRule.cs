@@ -23,6 +23,7 @@ namespace FluentValidation.Internal {
 	using System.Linq.Expressions;
 	using System.Reflection;
 	using System.Threading.Tasks;
+	using JetBrains.Annotations;
 	using Resources;
 	using Results;
 	using Validators;
@@ -31,29 +32,37 @@ namespace FluentValidation.Internal {
 	/// Defines a rule associated with a property.
 	/// </summary>
 	public class PropertyRule : IValidationRule {
+		[NotNull]
 		readonly List<IPropertyValidator> validators = new List<IPropertyValidator>();
+		[NotNull]
 		Func<CascadeMode> cascadeModeThunk = () => ValidatorOptions.CascadeMode;
+		[CanBeNull]
 		string propertyDisplayName;
+		[CanBeNull]
 		string propertyName;
 
 		/// <summary>
 		/// Property associated with this rule.
 		/// </summary>
+		[CanBeNull]
 		public MemberInfo Member { get; private set; }
 
 		/// <summary>
 		/// Function that can be invoked to retrieve the value of the property.
 		/// </summary>
+		[NotNull]
 		public Func<object, object> PropertyFunc { get; private set; }
 
 		/// <summary>
 		/// Expression that was used to create the rule.
 		/// </summary>
+		[CanBeNull]
 		public LambdaExpression Expression { get; private set; }
 
 		/// <summary>
 		/// String source that can be used to retrieve the display name (if null, falls back to the property name)
 		/// </summary>
+		[CanBeNull]
 		public IStringSource DisplayName { get; set; }
 
 		/// <summary>
@@ -64,16 +73,19 @@ namespace FluentValidation.Internal {
 		/// <summary>
 		/// Function that will be invoked if any of the validators associated with this rule fail.
 		/// </summary>
+		[NotNull]
 		public Action<object> OnFailure { get; set; }
 
 		/// <summary>
 		/// The current validator being configured by this rule.
 		/// </summary>
+		[CanBeNull]
 		public IPropertyValidator CurrentValidator { get; private set; }
 
 		/// <summary>
 		/// Type of the property being validated
 		/// </summary>
+		[CanBeNull]
 		public Type TypeToValidate { get; private set; }
 
 		/// <summary>
@@ -100,7 +112,7 @@ namespace FluentValidation.Internal {
 		/// <param name="cascadeModeThunk">Function to get the cascade mode.</param>
 		/// <param name="typeToValidate">Type to validate</param>
 		/// <param name="containerType">Container type that owns the property</param>
-		public PropertyRule(MemberInfo member, Func<object, object> propertyFunc, LambdaExpression expression, Func<CascadeMode> cascadeModeThunk, Type typeToValidate, Type containerType) {
+		public PropertyRule([CanBeNull] MemberInfo member, [NotNull] Func<object, object> propertyFunc, [CanBeNull] LambdaExpression expression, [NotNull] Func<CascadeMode> cascadeModeThunk, [CanBeNull] Type typeToValidate, [CanBeNull] Type containerType) {
 			Member = member;
 			PropertyFunc = propertyFunc;
 			Expression = expression;
@@ -115,14 +127,16 @@ namespace FluentValidation.Internal {
 		/// <summary>
 		/// Creates a new property rule from a lambda expression.
 		/// </summary>
-		public static PropertyRule Create<T, TProperty>(Expression<Func<T, TProperty>> expression) {
+		[NotNull]
+		public static PropertyRule Create<T, TProperty>([NotNull] Expression<Func<T, TProperty>> expression) {
 			return Create(expression, () => ValidatorOptions.CascadeMode);
 		}
 
 		/// <summary>
 		/// Creates a new property rule from a lambda expression.
 		/// </summary>
-		public static PropertyRule Create<T, TProperty>(Expression<Func<T, TProperty>> expression, Func<CascadeMode> cascadeModeThunk) {
+		[NotNull]
+		public static PropertyRule Create<T, TProperty>([NotNull] Expression<Func<T, TProperty>> expression, [NotNull] Func<CascadeMode> cascadeModeThunk) {
 			var member = expression.GetMember();
 			var compiled = expression.Compile();
 
@@ -132,7 +146,7 @@ namespace FluentValidation.Internal {
 		/// <summary>
 		/// Adds a validator to the rule.
 		/// </summary>
-		public void AddValidator(IPropertyValidator validator) {
+		public void AddValidator([CanBeNull] IPropertyValidator validator) {
 			CurrentValidator = validator;
 			validators.Add(validator);
 		}
@@ -140,7 +154,7 @@ namespace FluentValidation.Internal {
 		/// <summary>
 		/// Replaces a validator in this rule. Used to wrap validators.
 		/// </summary>
-		public void ReplaceValidator(IPropertyValidator original, IPropertyValidator newValidator) {
+		public void ReplaceValidator([CanBeNull] IPropertyValidator original, [CanBeNull] IPropertyValidator newValidator) {
 			var index = validators.IndexOf(original);
 
 			if (index > -1) {
@@ -155,7 +169,7 @@ namespace FluentValidation.Internal {
 		/// <summary>
 		/// Remove a validator in this rule.
 		/// </summary>
-		public void RemoveValidator(IPropertyValidator original) {
+		public void RemoveValidator([CanBeNull] IPropertyValidator original) {
 			if (ReferenceEquals(CurrentValidator, original)) {
 				CurrentValidator = validators.LastOrDefault(x => x != original);
 			}
@@ -175,6 +189,7 @@ namespace FluentValidation.Internal {
 		/// Returns the property name for the property being validated.
 		/// Returns null if it is not a property being validated (eg a method call)
 		/// </summary>
+		[CanBeNull]
 		public string PropertyName {
 			get { return propertyName; }
 			set {
@@ -186,11 +201,13 @@ namespace FluentValidation.Internal {
 		/// <summary>
 		/// Allows custom creation of an error message
 		/// </summary>
+		[CanBeNull]
 		public Func<PropertyValidatorContext, string> MessageBuilder { get; set; }
 
 		/// <summary>
 		/// Display name for the property. 
 		/// </summary>
+		[NotNull]
 		public string GetDisplayName() {
 			string result = null;
 
@@ -341,12 +358,12 @@ namespace FluentValidation.Internal {
 		/// <summary>
 		/// Invokes a property validator using the specified validation context.
 		/// </summary>
-		protected virtual IEnumerable<ValidationFailure> InvokePropertyValidator(ValidationContext context, IPropertyValidator validator, string propertyName) {
+		protected virtual IEnumerable<ValidationFailure> InvokePropertyValidator([NotNull] ValidationContext context, [NotNull] IPropertyValidator validator, [NotNull] string propertyName) {
 			var propertyContext = new PropertyValidatorContext(context, this, propertyName);
 			return validator.Validate(propertyContext);
 		}
 
-		public void ApplyCondition(Func<object, bool> predicate, ApplyConditionTo applyConditionTo = ApplyConditionTo.AllValidators) {
+		public void ApplyCondition([CanBeNull] Func<object, bool> predicate, ApplyConditionTo applyConditionTo = ApplyConditionTo.AllValidators) {
 			// Default behaviour for When/Unless as of v1.3 is to apply the condition to all previous validators in the chain.
 			if (applyConditionTo == ApplyConditionTo.AllValidators) {
 				foreach (var validator in Validators.ToList()) {

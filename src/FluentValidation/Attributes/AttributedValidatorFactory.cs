@@ -19,11 +19,13 @@
 namespace FluentValidation.Attributes {
 	using System;
 	using Internal;
+	using JetBrains.Annotations;
 
 	/// <summary>
 	/// Implementation of IValidatorFactory that looks for ValidatorAttribute instances on the specified type in order to provide the validator instance.
 	/// </summary>
 	public class AttributedValidatorFactory : IValidatorFactory {
+		[NotNull]
 		readonly InstanceCache cache = new InstanceCache();
 
 		/// <summary>

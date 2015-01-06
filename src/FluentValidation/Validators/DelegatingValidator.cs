@@ -22,18 +22,21 @@ namespace FluentValidation.Validators {
 	using System.Linq;
 	using System.Threading.Tasks;
 	using FluentValidation.Internal;
+	using JetBrains.Annotations;
 	using Resources;
 	using Results;
 
 	public class DelegatingValidator : IPropertyValidator, IDelegatingValidator {
+		[NotNull]
 		private readonly Func<object, bool> condition;
+		[NotNull]
 		public IPropertyValidator InnerValidator { get; private set; }
 
 		public virtual bool IsAsync {
 			get { return InnerValidator.IsAsync; }
 		}
 
-		public DelegatingValidator(Func<object, bool> condition, IPropertyValidator innerValidator) {
+		public DelegatingValidator([NotNull] Func<object, bool> condition, [NotNull] IPropertyValidator innerValidator) {
 			this.condition = condition;
 			InnerValidator = innerValidator;
 		}
@@ -80,7 +83,8 @@ namespace FluentValidation.Validators {
 	}
 
 	public interface IDelegatingValidator : IPropertyValidator {
+		[NotNull]
 		IPropertyValidator InnerValidator { get; }
-		bool CheckCondition(object instance);
+		bool CheckCondition([CanBeNull] object instance);
 	}
 }

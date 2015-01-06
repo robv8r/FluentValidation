@@ -20,6 +20,7 @@ namespace FluentValidation {
 	using System.Collections.Generic;
 	using System.Linq;
 	using System.Reflection;
+	using JetBrains.Annotations;
 	using Validators;
 
 	//TODO: Re-visit this interface for FluentValidation v3. Remove some of the duplication.
@@ -31,21 +32,25 @@ namespace FluentValidation {
 		/// <summary>
 		/// Gets the name display name for a property. 
 		/// </summary>
-		string GetName(string property);
+		[CanBeNull]
+		string GetName([NotNull] string property);
 		
 		/// <summary>
 		/// Gets a collection of validators grouped by property.
 		/// </summary>
+		[NotNull]
 		ILookup<string, IPropertyValidator> GetMembersWithValidators();
 		
 		/// <summary>
 		/// Gets validators for a particular property.
 		/// </summary>
-		IEnumerable<IPropertyValidator> GetValidatorsForMember(string name);
+		[NotNull]
+		IEnumerable<IPropertyValidator> GetValidatorsForMember([NotNull] string name);
 
 		/// <summary>
 		/// Gets rules for a property.
 		/// </summary>
-		IEnumerable<IValidationRule> GetRulesForMember(string name);
+		[NotNull]
+		IEnumerable<IValidationRule> GetRulesForMember([NotNull] string name);
 	}
 }

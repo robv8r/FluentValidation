@@ -22,24 +22,26 @@ namespace FluentValidation.Validators {
 	using System.Reflection;
 	using Attributes;
 	using Internal;
+	using JetBrains.Annotations;
 	using Results;
 
 	public abstract class AbstractComparisonValidator : PropertyValidator, IComparisonValidator {
 
+		[CanBeNull]
 		readonly Func<object, object> valueToCompareFunc;
 
-		protected AbstractComparisonValidator(IComparable value, Expression<Func<string>> errorMessageSelector) : base(errorMessageSelector) {
+		protected AbstractComparisonValidator([NotNull] IComparable value, [NotNull] Expression<Func<string>> errorMessageSelector) : base(errorMessageSelector) {
 			value.Guard("value must not be null.");
 			ValueToCompare = value;
 		}
 
-		protected AbstractComparisonValidator(Func<object, object> valueToCompareFunc, MemberInfo member, Expression<Func<string>> errorMessageSelector)
+		protected AbstractComparisonValidator([NotNull] Func<object, object> valueToCompareFunc, [NotNull] MemberInfo member, [NotNull] Expression<Func<string>> errorMessageSelector)
 			: base(errorMessageSelector) {
 			this.valueToCompareFunc = valueToCompareFunc;
 			this.MemberToCompare = member;
 		}
 
-		protected sealed override bool IsValid(PropertyValidatorContext context) {
+		protected sealed override bool IsValid([NotNull] PropertyValidatorContext context) {
 			if(context.PropertyValue == null) {
 				// If we're working with a nullable type then this rule should not be applied.
 				// If you want to ensure that it's never null then a NotNull rule should also be applied. 
@@ -56,7 +58,8 @@ namespace FluentValidation.Validators {
 			return true;
 		}
 
-		private IComparable GetComparisonValue(PropertyValidatorContext context) {
+		[CanBeNull]
+		private IComparable GetComparisonValue([NotNull] PropertyValidatorContext context) {
 			if(valueToCompareFunc != null) {
 				return (IComparable)valueToCompareFunc(context.Instance);
 			}
@@ -64,7 +67,7 @@ namespace FluentValidation.Validators {
 			return (IComparable)ValueToCompare;
 		}
 
-		public abstract bool IsValid(IComparable value, IComparable valueToCompare);
+		public abstract bool IsValid([CanBeNull] IComparable value, [CanBeNull] IComparable valueToCompare);
 		public abstract Comparison Comparison { get; }
 		public MemberInfo MemberToCompare { get; private set; }
 		public object ValueToCompare { get; private set; }
@@ -72,7 +75,9 @@ namespace FluentValidation.Validators {
 
 	public interface IComparisonValidator : IPropertyValidator {
 		Comparison Comparison { get; }
+		[CanBeNull]
 		MemberInfo MemberToCompare { get; }
+		[CanBeNull]
 		object ValueToCompare { get; }
 	}
 

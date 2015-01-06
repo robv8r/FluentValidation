@@ -20,6 +20,7 @@ namespace FluentValidation {
 	using System;
 	using System.Collections.Generic;
 	using System.Threading.Tasks;
+	using JetBrains.Annotations;
 	using Internal;
 	using Results;
 
@@ -33,14 +34,16 @@ namespace FluentValidation {
 		/// </summary>
 		/// <param name="instance">The instance to validate</param>
 		/// <returns>A ValidationResult object containing any validation failures.</returns>
-		ValidationResult Validate(T instance);
+		[NotNull]
+		ValidationResult Validate([NotNull] T instance);
 
 		/// <summary>
 		/// Validate the specified instance asynchronously
 		/// </summary>
 		/// <param name="instance">The instance to validate</param>
 		/// <returns>A ValidationResult object containing any validation failures.</returns>
-		Task<ValidationResult> ValidateAsync(T instance);
+		[NotNull]
+		Task<ValidationResult> ValidateAsync([NotNull] T instance);
 
 		/// <summary>
 		/// Sets the cascade mode for all rules within this validator.
@@ -57,38 +60,43 @@ namespace FluentValidation {
 		/// </summary>
 		/// <param name="instance"></param>
 		/// <returns>A ValidationResult containing any validation failures</returns>
-		ValidationResult Validate(object instance);
+		[NotNull]
+		ValidationResult Validate([NotNull] object instance);
 
 		/// <summary>
 		/// Validates the specified instance asynchronously
 		/// </summary>
 		/// <param name="instance"></param>
 		/// <returns>A ValidationResult containing any validation failures</returns>
-		Task<ValidationResult> ValidateAsync(object instance);
+		[NotNull]
+		Task<ValidationResult> ValidateAsync([NotNull] object instance);
 
 		/// <summary>
 		/// Validates the specified instance.
 		/// </summary>
 		/// <param name="context">A ValidationContext</param>
 		/// <returns>A ValidationResult object containy any validation failures.</returns>
-		ValidationResult Validate(ValidationContext context);
+		[NotNull]
+		ValidationResult Validate([NotNull] ValidationContext context);
 
 		/// <summary>
 		/// Validates the specified instance asynchronously.
 		/// </summary>
 		/// <param name="context">A ValidationContext</param>
 		/// <returns>A ValidationResult object containy any validation failures.</returns>		
-		Task<ValidationResult> ValidateAsync(ValidationContext context);
+		[NotNull]
+		Task<ValidationResult> ValidateAsync([NotNull] ValidationContext context);
 
 		/// <summary>
 		/// Creates a hook to access various meta data properties
 		/// </summary>
 		/// <returns>A IValidatorDescriptor object which contains methods to access metadata</returns>
+		[NotNull]
 		IValidatorDescriptor CreateDescriptor();
 
 		/// <summary>
 		/// Checks to see whether the validator can validate objects of the specified type
 		/// </summary>
-		bool CanValidateInstancesOfType(Type type);
+		bool CanValidateInstancesOfType([NotNull] Type type);
 	}
 }

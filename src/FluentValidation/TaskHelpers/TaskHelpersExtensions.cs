@@ -4,6 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Contracts;
 using System.Linq.Expressions;
 using System.Reflection;
+using JetBrains.Annotations;
 
 namespace System.Threading.Tasks
 {
@@ -373,7 +374,8 @@ namespace System.Threading.Tasks
 		// the task ended in. Intended to roughly emulate C# 5's support for "finally" in async methods.
 		// </summary>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "The caught exception type is reflected into a faulted task.")]
-		internal static Task Finally(this Task task, Action continuation, bool runSynchronously = false)
+		[NotNull]
+		internal static Task Finally([NotNull] this Task task, [NotNull] Action continuation, bool runSynchronously = false)
 		{
 			// Stay on the same thread if we can
 			if (task.IsCompleted)

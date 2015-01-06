@@ -18,6 +18,7 @@
 
 namespace FluentValidation {
 	using System;
+	using JetBrains.Annotations;
 
 	/// <summary>
 	/// Gets validators for a particular type.
@@ -26,11 +27,13 @@ namespace FluentValidation {
 		/// <summary>
 		/// Gets the validator for the specified type.
 		/// </summary>
+		[CanBeNull]
 		IValidator<T> GetValidator<T>();
 
 		/// <summary>
 		/// Gets the validator for the specified type.
 		/// </summary>
-		IValidator GetValidator(Type type);
+		[CanBeNull]
+		IValidator GetValidator([CanBeNull] Type type);
 	}
 }

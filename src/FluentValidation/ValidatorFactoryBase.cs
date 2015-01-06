@@ -18,6 +18,7 @@
 
 namespace FluentValidation {
 	using System;
+	using JetBrains.Annotations;
 
 	public abstract class ValidatorFactoryBase : IValidatorFactory {
 		public IValidator<T> GetValidator<T>() {
@@ -29,6 +30,7 @@ namespace FluentValidation {
 			return CreateInstance(genericType);
 		}
 
-		public abstract IValidator CreateInstance(Type validatorType);
+		[NotNull]
+		public abstract IValidator CreateInstance([NotNull] Type validatorType);
 	}
 }

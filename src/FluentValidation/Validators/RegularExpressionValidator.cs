@@ -21,25 +21,29 @@ namespace FluentValidation.Validators {
 	using System.Text.RegularExpressions;
 	using Attributes;
 	using Internal;
+	using JetBrains.Annotations;
 	using Resources;
 	using Results;
 
 	public class RegularExpressionValidator : PropertyValidator, IRegularExpressionValidator {
+		[NotNull]
 		readonly string expression;
+		
+		[NotNull]
 		readonly Regex regex;
 
-		public RegularExpressionValidator(string expression) : base(() => Messages.regex_error) {
+		public RegularExpressionValidator([NotNull] string expression) : base(() => Messages.regex_error) {
 			this.expression = expression;
 			regex = new Regex(expression);
 
 		}
 
-		public RegularExpressionValidator(Regex regex) : base(() => Messages.regex_error) {
+		public RegularExpressionValidator([NotNull] Regex regex) : base(() => Messages.regex_error) {
 			this.expression = regex.ToString();
 			this.regex = regex;
 		}
 
-		public RegularExpressionValidator(string expression, RegexOptions options) : base(() => Messages.regex_error) {
+		public RegularExpressionValidator([NotNull] string expression, RegexOptions options) : base(() => Messages.regex_error) {
 			this.expression = expression;
 			this.regex = new Regex(expression, options);
 		}
@@ -57,6 +61,7 @@ namespace FluentValidation.Validators {
 	}
 
 	public interface IRegularExpressionValidator : IPropertyValidator {
+		[NotNull]
 		string Expression { get; }
 	}
 }

@@ -26,25 +26,32 @@ namespace FluentValidation {
 	using System.Linq.Expressions;
 	using System.Reflection;
 	using Internal;
+	using JetBrains.Annotations;
 
 	public static class ValidatorOptions {
 		public static CascadeMode CascadeMode = CascadeMode.Continue;
+		[CanBeNull]
 		public static Type ResourceProviderType;
 
+		[NotNull]
 		private static Func<Type, MemberInfo, LambdaExpression, string> propertyNameResolver = DefaultPropertyNameResolver;
+		[NotNull]
 		private static Func<Type, MemberInfo, LambdaExpression, string> displayNameResolver = DefaultDisplayNameResolver;
 
+		[NotNull]
 		public static Func<Type, MemberInfo, LambdaExpression, string> PropertyNameResolver {
 			get { return propertyNameResolver; }
 			set { propertyNameResolver = value ?? DefaultPropertyNameResolver; }
 		}
 
+		[NotNull]
 		public static Func<Type, MemberInfo, LambdaExpression, string> DisplayNameResolver {
 			get { return displayNameResolver; }
 			set { displayNameResolver = value ?? DefaultDisplayNameResolver; }
 		}
 
-		static string DefaultPropertyNameResolver(Type type, MemberInfo memberInfo, LambdaExpression expression) {
+		[CanBeNull]
+		static string DefaultPropertyNameResolver([CanBeNull] Type type, [CanBeNull] MemberInfo memberInfo, [CanBeNull] LambdaExpression expression) {
 			if (expression != null) {
 				var chain = PropertyChain.FromExpression(expression);
 				if (chain.Count > 0) return chain.ToString();
@@ -57,14 +64,16 @@ namespace FluentValidation {
 			return null;
 		}	
 		
-		static string DefaultDisplayNameResolver(Type type, MemberInfo memberInfo, LambdaExpression expression) {
+		[CanBeNull]
+		static string DefaultDisplayNameResolver([CanBeNull] Type type, [CanBeNull] MemberInfo memberInfo, [CanBeNull] LambdaExpression expression) {
 			if (memberInfo == null) return null;
 		    return GetDisplayName(memberInfo);
 		}
 
 		// Nasty hack to work around not referencing DataAnnotations directly. 
 		// At some point investigate the DataAnnotations reference issue in more detail and go back to using the code above. 
-		static string GetDisplayName(MemberInfo member) {
+		[CanBeNull]
+		static string GetDisplayName([NotNull] MemberInfo member) {
 			var attributes = (from attr in member.GetCustomAttributes(true)
 			                  select new {attr, type = attr.GetType()}).ToList();
 

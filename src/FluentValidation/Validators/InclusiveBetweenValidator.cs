@@ -20,10 +20,11 @@ namespace FluentValidation.Validators {
 	using System;
 	using Attributes;
 	using Internal;
+	using JetBrains.Annotations;
 	using Resources;
 
 	public class InclusiveBetweenValidator : PropertyValidator, IBetweenValidator {
-		public InclusiveBetweenValidator(IComparable from, IComparable to) : base(() => Messages.inclusivebetween_error) {
+		public InclusiveBetweenValidator([CanBeNull] IComparable from, [CanBeNull] IComparable to) : base(() => Messages.inclusivebetween_error) {
 			To = to;
 			From = from;
 
@@ -57,7 +58,9 @@ namespace FluentValidation.Validators {
 	}
 
 	public interface IBetweenValidator : IPropertyValidator {
+		[CanBeNull]
 		IComparable From { get; }
+		[CanBeNull]
 		IComparable To { get; }
 	}
 }

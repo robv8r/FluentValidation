@@ -22,13 +22,14 @@ namespace FluentValidation.Validators {
 	using System.Reflection;
 	using Attributes;
 	using Internal;
+	using JetBrains.Annotations;
 	using Resources;
 
 	public class LessThanOrEqualValidator : AbstractComparisonValidator {
-		public LessThanOrEqualValidator(IComparable value) : base(value, () => Messages.lessthanorequal_error) {
+		public LessThanOrEqualValidator([NotNull] IComparable value) : base(value, () => Messages.lessthanorequal_error) {
 		}
 
-		public LessThanOrEqualValidator(Func<object, object> valueToCompareFunc, MemberInfo member)
+		public LessThanOrEqualValidator([NotNull] Func<object, object> valueToCompareFunc, [NotNull] MemberInfo member)
 			: base(valueToCompareFunc, member, () => Messages.lessthanorequal_error) {
 		}
 

@@ -22,36 +22,39 @@ namespace FluentValidation.Validators {
 	using System.Reflection;
 	using Attributes;
 	using Internal;
+	using JetBrains.Annotations;
 	using Resources;
 
 	public class EqualValidator : PropertyValidator, IComparisonValidator {
+		[CanBeNull]
 		readonly Func<object, object> func;
+		[CanBeNull]
 		readonly IEqualityComparer comparer;
 
-		public EqualValidator(object valueToCompare) : base(() => Messages.equal_error) {
+		public EqualValidator([CanBeNull] object valueToCompare) : base(() => Messages.equal_error) {
 			this.ValueToCompare = valueToCompare;
 		}
 
-		public EqualValidator(object valueToCompare, IEqualityComparer comparer)
+		public EqualValidator([CanBeNull] object valueToCompare, [NotNull] IEqualityComparer comparer)
 			: base(() => Messages.equal_error) {
 			ValueToCompare = valueToCompare;
 			this.comparer = comparer;
 		}
 
-		public EqualValidator(Func<object, object> comparisonProperty, MemberInfo member)
+		public EqualValidator([CanBeNull] Func<object, object> comparisonProperty, [CanBeNull] MemberInfo member)
 			: base(() => Messages.equal_error)  {
 			func = comparisonProperty;
 			MemberToCompare = member;
 		}
 
-		public EqualValidator(Func<object, object> comparisonProperty, MemberInfo member, IEqualityComparer comparer)
+		public EqualValidator([CanBeNull] Func<object, object> comparisonProperty, [CanBeNull] MemberInfo member, [CanBeNull] IEqualityComparer comparer)
 			: base(() => Messages.equal_error) {
 			func = comparisonProperty;
 			MemberToCompare = member;
 			this.comparer = comparer;
 		}
 
-		protected override bool IsValid(PropertyValidatorContext context) {
+		protected override bool IsValid([NotNull] PropertyValidatorContext context) {
 			var comparisonValue = GetComparisonValue(context);
 			bool success = Compare(comparisonValue, context.PropertyValue);
 
@@ -63,7 +66,8 @@ namespace FluentValidation.Validators {
 			return true;
 		}
 
-		private object GetComparisonValue(PropertyValidatorContext context) {
+		[CanBeNull]
+		private object GetComparisonValue([NotNull] PropertyValidatorContext context) {
 			if(func != null) {
 				return func(context.Instance);
 			}
@@ -78,7 +82,7 @@ namespace FluentValidation.Validators {
 		public MemberInfo MemberToCompare { get; private set; }
 		public object ValueToCompare { get; private set; }
 
-		protected bool Compare(object comparisonValue, object propertyValue) {
+		protected bool Compare([CanBeNull] object comparisonValue, [CanBeNull] object propertyValue) {
 			if(comparer != null) {
 				return comparer.Equals(comparisonValue, propertyValue);
 			}

@@ -10,31 +10,38 @@ namespace FluentValidation.Validators {
 	using System.Collections.Generic;
 	using System.Linq;
 	using System.Threading.Tasks;
+	using JetBrains.Annotations;
 	using FluentValidation.Results;
 
 	public class ChildCollectionValidatorAdaptor : NoopPropertyValidator {
+		[NotNull]
 		static readonly IEnumerable<ValidationFailure> EmptyResult = Enumerable.Empty<ValidationFailure>();
+		[NotNull]
 		static readonly Task<IEnumerable<ValidationFailure>> AsyncEmptyResult = TaskHelpers.FromResult(Enumerable.Empty<ValidationFailure>());
 
+		[NotNull]
 		readonly Func<object, IValidator> childValidatorProvider;
+		[NotNull]
 		readonly Type childValidatorType;
 
 		public override bool IsAsync {
 			get { return true; }
 		}
 
+		[NotNull]
 		public Type ChildValidatorType {
 			get { return childValidatorType; }
 		}
 
+		[CanBeNull]
 		public Func<object, bool> Predicate { get; set; }
 
-		public ChildCollectionValidatorAdaptor(IValidator childValidator) {
+		public ChildCollectionValidatorAdaptor([NotNull] IValidator childValidator) {
 			this.childValidatorProvider = _ => childValidator;
 			this.childValidatorType = childValidator.GetType();
 		}
 
-		public ChildCollectionValidatorAdaptor(Func<object, IValidator> childValidatorProvider, Type childValidatorType) {
+		public ChildCollectionValidatorAdaptor([NotNull] Func<object, IValidator> childValidatorProvider, [NotNull] Type childValidatorType) {
 			this.childValidatorProvider = childValidatorProvider;
 			this.childValidatorType = childValidatorType;
 		}
@@ -68,9 +75,9 @@ namespace FluentValidation.Validators {
 		}
 
 		TResult ValidateInternal<TResult>(
-			PropertyValidatorContext context,
-			Func<IEnumerable<Tuple<ValidationContext, IValidator>>, TResult> validatorApplicator,
-			TResult emptyResult
+			[NotNull] PropertyValidatorContext context,
+			[NotNull] Func<IEnumerable<Tuple<ValidationContext, IValidator>>, TResult> validatorApplicator,
+			[CanBeNull] TResult emptyResult
 		) {
 			if (context.Rule.Member == null) {
 				throw new InvalidOperationException(string.Format("Nested validators can only be used with Member Expressions."));

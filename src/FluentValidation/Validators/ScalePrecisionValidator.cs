@@ -20,6 +20,7 @@ namespace FluentValidation.Validators
 {
     using System;
     using System.Linq.Expressions;
+    using JetBrains.Annotations;
     using Resources;
 
     /// <summary>
@@ -42,19 +43,19 @@ namespace FluentValidation.Validators
         }
 
         public ScalePrecisionValidator(
-            int scale, int precision, string errorMessageResourceName, Type errorMessageResourceType)
+            int scale, int precision, [NotNull] string errorMessageResourceName, [NotNull] Type errorMessageResourceType)
             : base(errorMessageResourceName, errorMessageResourceType)
         {
             Init(scale, precision);
         }
 
-        public ScalePrecisionValidator(int scale, int precision, string errorMessage)
+        public ScalePrecisionValidator(int scale, int precision, [NotNull] string errorMessage)
             : base(errorMessage)
         {
             Init(scale, precision);
         }
 
-        public ScalePrecisionValidator(int scale, int precision, Expression<Func<string>> errorMessageResourceSelector)
+        public ScalePrecisionValidator(int scale, int precision, [NotNull] Expression<Func<string>> errorMessageResourceSelector)
             : base(errorMessageResourceSelector)
         {
             Init(scale, precision);
@@ -106,6 +107,7 @@ namespace FluentValidation.Validators
                     string.Format("Scale must be greater than precision. [scale:{0}, precision:{1}].", Scale, Precision));
         }
 
+        [NotNull]
         private static UInt32[] GetBits(decimal Decimal)
         {
             // We want the integer parts as uint

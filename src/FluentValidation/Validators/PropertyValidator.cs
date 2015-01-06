@@ -25,11 +25,14 @@ namespace FluentValidation.Validators {
 	using System.Linq.Expressions;
 	using System.Threading.Tasks;
 	using FluentValidation.Internal;
+	using JetBrains.Annotations;
 	using Resources;
 	using Results;
 
 	public abstract class PropertyValidator : IPropertyValidator {
+		[NotNull]
 		private readonly List<Func<object, object, object>> customFormatArgs = new List<Func<object, object, object>>();
+		[NotNull]
 		private IStringSource errorSource;
 
 	    public virtual bool IsAsync {
@@ -42,15 +45,15 @@ namespace FluentValidation.Validators {
 			get { return customFormatArgs; }
 		}
 
-		protected PropertyValidator(string errorMessageResourceName, Type errorMessageResourceType) {
+		protected PropertyValidator([NotNull] string errorMessageResourceName, [NotNull] Type errorMessageResourceType) {
 			errorSource = new LocalizedStringSource(errorMessageResourceType, errorMessageResourceName, new FallbackAwareResourceAccessorBuilder());
 		}
 
-		protected PropertyValidator(string errorMessage) {
+		protected PropertyValidator([NotNull] string errorMessage) {
 			errorSource = new StaticStringSource(errorMessage);
 		}
 
-		protected PropertyValidator(Expression<Func<string>> errorMessageResourceSelector) {
+		protected PropertyValidator([NotNull] Expression<Func<string>> errorMessageResourceSelector) {
 			errorSource = LocalizedStringSource.CreateFromExpression(errorMessageResourceSelector, new FallbackAwareResourceAccessorBuilder());
 		}
 
@@ -64,7 +67,7 @@ namespace FluentValidation.Validators {
 			}
 		}
 
-		public virtual IEnumerable<ValidationFailure> Validate(PropertyValidatorContext context) {
+		public virtual IEnumerable<ValidationFailure> Validate([NotNull] PropertyValidatorContext context) {
 			context.MessageFormatter.AppendPropertyName(context.PropertyDescription);
 			context.MessageFormatter.AppendArgument("PropertyValue", context.PropertyValue);
 
@@ -75,7 +78,7 @@ namespace FluentValidation.Validators {
 			return Enumerable.Empty<ValidationFailure>();
 		}
 
-		public virtual Task<IEnumerable<ValidationFailure>> ValidateAsync(PropertyValidatorContext context) {
+		public virtual Task<IEnumerable<ValidationFailure>> ValidateAsync([NotNull] PropertyValidatorContext context) {
 			context.MessageFormatter.AppendPropertyName(context.PropertyDescription);
 			context.MessageFormatter.AppendArgument("PropertyValue", context.PropertyValue);
 
@@ -87,9 +90,10 @@ namespace FluentValidation.Validators {
 				);
 		}
 
-		protected abstract bool IsValid(PropertyValidatorContext context);
+		protected abstract bool IsValid([NotNull] PropertyValidatorContext context);
 
-		protected virtual Task<bool> IsValidAsync(PropertyValidatorContext context) {
+		[NotNull]
+		protected virtual Task<bool> IsValidAsync([NotNull] PropertyValidatorContext context) {
 			return TaskHelpers.FromResult(IsValid(context));
 		}
 
@@ -98,7 +102,8 @@ namespace FluentValidation.Validators {
 		/// </summary>
 		/// <param name="context">The validator context</param>
 		/// <returns>Returns an error validation result.</returns>
-		protected virtual ValidationFailure CreateValidationError(PropertyValidatorContext context) {
+		[NotNull]
+		protected virtual ValidationFailure CreateValidationError([NotNull] PropertyValidatorContext context) {
 			Func<PropertyValidatorContext, string> errorBuilder = context.Rule.MessageBuilder ?? BuildErrorMessage;
 			var error = errorBuilder(context);
 
@@ -111,7 +116,8 @@ namespace FluentValidation.Validators {
 			return failure;
 		}
 
-		string BuildErrorMessage(PropertyValidatorContext context) {
+		[NotNull]
+		string BuildErrorMessage([NotNull] PropertyValidatorContext context) {
 			context.MessageFormatter.AppendAdditionalArguments(
 				customFormatArgs.Select(func => func(context.Instance, context.PropertyValue)).ToArray()
 				);

@@ -20,6 +20,7 @@ namespace FluentValidation.Validators {
 	using System;
 	using System.Linq.Expressions;
 	using Attributes;
+	using JetBrains.Annotations;
 	using Resources;
 
 	public class LengthValidator : PropertyValidator, ILengthValidator {
@@ -29,7 +30,7 @@ namespace FluentValidation.Validators {
 		public LengthValidator(int min, int max) : this(min, max, () => Messages.length_error) {
 		}
 
-		public LengthValidator(int min, int max, Expression<Func<string>> errorMessageResourceSelector) : base(errorMessageResourceSelector) {
+		public LengthValidator(int min, int max, [NotNull] Expression<Func<string>> errorMessageResourceSelector) : base(errorMessageResourceSelector) {
 			Max = max;
 			Min = min;
 
@@ -67,7 +68,7 @@ namespace FluentValidation.Validators {
 
         }
 
-        public MaximumLengthValidator(int max, Expression<Func<string>> errorMessageResourceSelector)
+        public MaximumLengthValidator(int max, [NotNull] Expression<Func<string>> errorMessageResourceSelector)
             : base(0, max, errorMessageResourceSelector) {
 
         }
@@ -78,7 +79,7 @@ namespace FluentValidation.Validators {
 
         }
 
-        public MinimumLengthValidator(int min, Expression<Func<string>> errorMessageResourceSelector) 
+        public MinimumLengthValidator(int min, [NotNull] Expression<Func<string>> errorMessageResourceSelector) 
             : base(min, -1, errorMessageResourceSelector) {
 
         }

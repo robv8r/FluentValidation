@@ -20,6 +20,7 @@ namespace FluentValidation.Validators {
 	using System;
 	using System.Collections.Generic;
 	using System.Threading.Tasks;
+	using JetBrains.Annotations;
 	using Resources;
 	using Results;
 
@@ -31,17 +32,24 @@ namespace FluentValidation.Validators {
 	public interface IPropertyValidator {
 		bool IsAsync { get; }
 
-		IEnumerable<ValidationFailure> Validate(PropertyValidatorContext context);
+		[NotNull]
+		IEnumerable<ValidationFailure> Validate([NotNull] PropertyValidatorContext context);
 
-		Task<IEnumerable<ValidationFailure>> ValidateAsync(PropertyValidatorContext context);
+		[NotNull]
+		Task<IEnumerable<ValidationFailure>> ValidateAsync([NotNull] PropertyValidatorContext context);
 
 		/// <summary>
 		/// Custom message arguments. 
 		/// Arg 1: Instance being validated
 		/// Arg 2: Property value
 		/// </summary>
+		[NotNull]
 		ICollection<Func<object, object, object>> CustomMessageFormatArguments { get; }
+
+		[CanBeNull]
 		Func<object, object> CustomStateProvider { get; set; }
+
+		[CanBeNull]
 		IStringSource ErrorMessageSource { get; set; }
 	}
 }

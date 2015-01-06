@@ -17,6 +17,8 @@
 #endregion
 
 namespace FluentValidation {
+	using JetBrains.Annotations;
+
 	/// <summary>
 	/// Validator implementation that allows rules to be defined without inheriting from AbstractValidator.
 	/// </summary>
@@ -38,12 +40,13 @@ namespace FluentValidation {
 		/// <summary>
 		/// Delegate that specifies configuring an InlineValidator.
 		/// </summary>
-		public delegate IRuleBuilderOptions<T, TProperty> InlineRuleCreator<TProperty>(InlineValidator<T> validator);
+		[NotNull]
+		public delegate IRuleBuilderOptions<T, TProperty> InlineRuleCreator<TProperty>([NotNull] InlineValidator<T> validator);
 
 		/// <summary>
 		/// Allows configuration of the validator.
 		/// </summary>
-		public void Add<TProperty>(InlineRuleCreator<TProperty> ruleCreator) {
+		public void Add<TProperty>([NotNull] InlineRuleCreator<TProperty> ruleCreator) {
 			ruleCreator(this);
 		}
 	}

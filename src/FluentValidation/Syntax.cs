@@ -20,6 +20,7 @@ namespace FluentValidation {
 	using System;
 	using System.Collections.Generic;
 	using Internal;
+	using JetBrains.Annotations;
 	using Validators;
 
 	/// <summary>
@@ -41,13 +42,15 @@ namespace FluentValidation {
 		/// </summary>
 		/// <param name="validator">The validator to set</param>
 		/// <returns></returns>
-		IRuleBuilderOptions<T, TProperty> SetValidator(IPropertyValidator validator);
+		[NotNull]
+		IRuleBuilderOptions<T, TProperty> SetValidator([NotNull] IPropertyValidator validator);
 
 		/// <summary>
 		/// Associates an instance of IValidator with the current property rule.
 		/// </summary>
 		/// <param name="validator">The validator to use</param>
-		IRuleBuilderOptions<T, TProperty> SetValidator(IValidator<TProperty> validator);
+		[NotNull]
+		IRuleBuilderOptions<T, TProperty> SetValidator([NotNull] IValidator<TProperty> validator);
 	}
 
 

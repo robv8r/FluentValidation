@@ -19,6 +19,7 @@
 namespace FluentValidation.Internal {
 	using System;
 	using System.ComponentModel;
+	using JetBrains.Annotations;
 
 	/// <summary>
 	/// Represents an object that is configurable.
@@ -32,6 +33,7 @@ namespace FluentValidation.Internal {
 		/// <param name="configurator">Action to configure the object.</param>
 		/// <returns></returns>
 		[EditorBrowsable(EditorBrowsableState.Never)]
-		TNext Configure(Action<TConfiguration> configurator);
+		[NotNull]
+		TNext Configure([NotNull] Action<TConfiguration> configurator);
 	}
 }

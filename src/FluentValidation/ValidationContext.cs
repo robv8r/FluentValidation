@@ -18,44 +18,51 @@
 
 namespace FluentValidation {
 	using Internal;
+	using JetBrains.Annotations;
 
 	public class ValidationContext<T> : ValidationContext {
-		public ValidationContext(T instanceToValidate) : this(instanceToValidate, new PropertyChain(), new DefaultValidatorSelector()) {
+		public ValidationContext([NotNull] T instanceToValidate) : this(instanceToValidate, new PropertyChain(), new DefaultValidatorSelector()) {
 			
 		}
 
-		public ValidationContext(T instanceToValidate, PropertyChain propertyChain, IValidatorSelector validatorSelector)
+		public ValidationContext([NotNull] T instanceToValidate, [NotNull] PropertyChain propertyChain, [NotNull] IValidatorSelector validatorSelector)
 			: base(instanceToValidate, propertyChain, validatorSelector) {
 
 			InstanceToValidate = instanceToValidate;
 		}
 
+		[NotNull]
 		public new T InstanceToValidate { get; private set; }
 	}
 
 	public class ValidationContext {
 
-		public ValidationContext(object instanceToValidate)
+		public ValidationContext([NotNull] object instanceToValidate)
 		 : this (instanceToValidate, new PropertyChain(), new DefaultValidatorSelector()){
 			
 		}
 
-		public ValidationContext(object instanceToValidate, PropertyChain propertyChain, IValidatorSelector validatorSelector) {
+		public ValidationContext([NotNull] object instanceToValidate, [NotNull] PropertyChain propertyChain, [NotNull] IValidatorSelector validatorSelector) {
 			PropertyChain = new PropertyChain(propertyChain);
 			InstanceToValidate = instanceToValidate;
 			Selector = validatorSelector;
 		}
 
+		[NotNull]
 		public PropertyChain PropertyChain { get; private set; }
+		[NotNull]
 		public object InstanceToValidate { get; private set; }
+		[NotNull]
 		public IValidatorSelector Selector { get; private set; }
 		public bool IsChildContext { get; internal set; }
 
-		public ValidationContext Clone(PropertyChain chain = null, object instanceToValidate = null, IValidatorSelector selector = null) {
+		[NotNull]
+		public ValidationContext Clone([CanBeNull] PropertyChain chain = null, [CanBeNull] object instanceToValidate = null, [CanBeNull] IValidatorSelector selector = null) {
 			return new ValidationContext(instanceToValidate ?? this.InstanceToValidate, chain ?? this.PropertyChain, selector ?? this.Selector);
 		}
 
-		internal ValidationContext CloneForChildValidator(object instanceToValidate) {
+		[NotNull]
+		internal ValidationContext CloneForChildValidator([NotNull] object instanceToValidate) {
 			return new ValidationContext(instanceToValidate, PropertyChain, Selector) {
 				IsChildContext = true
 			};

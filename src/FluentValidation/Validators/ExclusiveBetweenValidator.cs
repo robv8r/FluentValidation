@@ -20,10 +20,11 @@ namespace FluentValidation.Validators {
 	using System;
 	using Attributes;
 	using Internal;
+	using JetBrains.Annotations;
 	using Resources;
 
 	public class ExclusiveBetweenValidator : PropertyValidator, IBetweenValidator {
-		public ExclusiveBetweenValidator(IComparable from, IComparable to) : base(() => Messages.exclusivebetween_error) {
+		public ExclusiveBetweenValidator([CanBeNull] IComparable from, [CanBeNull] IComparable to) : base(() => Messages.exclusivebetween_error) {
 			To = to;
 			From = from;
 

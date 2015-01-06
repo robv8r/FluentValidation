@@ -21,6 +21,7 @@ namespace FluentValidation {
 	using System.Collections.Generic;
 	using System.Threading.Tasks;
 	using Internal;
+	using JetBrains.Annotations;
 	using Results;
 	using Validators;
 
@@ -31,10 +32,12 @@ namespace FluentValidation {
 		/// <summary>
 		/// The validators that are grouped under this rule.
 		/// </summary>
+		[NotNull]
 		IEnumerable<IPropertyValidator> Validators { get; }
 		/// <summary>
 		/// Name of the rule-set to which this rule belongs.
 		/// </summary>
+		[NotNull]
 		string RuleSet { get; set; }
 
 		/// <summary>
@@ -42,15 +45,17 @@ namespace FluentValidation {
 		/// </summary>
 		/// <param name="context">Validation Context</param>
 		/// <returns>A collection of validation failures</returns>
-		IEnumerable<ValidationFailure> Validate(ValidationContext context);
+		[NotNull]
+		IEnumerable<ValidationFailure> Validate([NotNull] ValidationContext context);
 
 		/// <summary>
 		/// Performs validation using a validation context and returns a collection of Validation Failures asynchronoulsy.
 		/// </summary>
 		/// <param name="context">Validation Context</param>
 		/// <returns>A collection of validation failures</returns>
-		Task<IEnumerable<ValidationFailure>> ValidateAsync(ValidationContext context);
+		[NotNull]
+		Task<IEnumerable<ValidationFailure>> ValidateAsync([NotNull] ValidationContext context);
 
-		void ApplyCondition(Func<object, bool> predicate, ApplyConditionTo applyConditionTo = ApplyConditionTo.AllValidators);
+		void ApplyCondition([NotNull] Func<object, bool> predicate, ApplyConditionTo applyConditionTo = ApplyConditionTo.AllValidators);
 	}
 }

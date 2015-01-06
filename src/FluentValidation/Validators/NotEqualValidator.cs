@@ -22,31 +22,35 @@ namespace FluentValidation.Validators {
 	using System.Reflection;
 	using Attributes;
 	using Internal;
+	using JetBrains.Annotations;
 	using Resources;
 
 	public class NotEqualValidator : PropertyValidator, IComparisonValidator {
+		[CanBeNull]
 		readonly IEqualityComparer comparer;
+		
+		[CanBeNull]
 		readonly Func<object, object> func;
 
-		public NotEqualValidator(Func<object, object> func, MemberInfo memberToCompare)
+		public NotEqualValidator([NotNull] Func<object, object> func, [NotNull] MemberInfo memberToCompare)
 			: base(() => Messages.notequal_error) {
 			this.func = func;
 			MemberToCompare = memberToCompare;
 		}
 
-		public NotEqualValidator(Func<object, object> func, MemberInfo memberToCompare, IEqualityComparer equalityComparer)
+		public NotEqualValidator([NotNull] Func<object, object> func, MemberInfo memberToCompare, [NotNull] IEqualityComparer equalityComparer)
 			: base(() => Messages.notequal_error) {
 			this.func = func;
 			this.comparer = equalityComparer;
 			MemberToCompare = memberToCompare;
 		}
 
-		public NotEqualValidator(object comparisonValue)
+		public NotEqualValidator([CanBeNull] object comparisonValue)
 			: base(() => Messages.notequal_error) {
 			ValueToCompare = comparisonValue;
 		}
 
-		public NotEqualValidator(object comparisonValue, IEqualityComparer equalityComparer)
+		public NotEqualValidator([CanBeNull] object comparisonValue, [NotNull] IEqualityComparer equalityComparer)
 			: base(() => Messages.notequal_error) {
 			ValueToCompare = comparisonValue;
 			comparer = equalityComparer;
@@ -64,7 +68,7 @@ namespace FluentValidation.Validators {
 			return true;
 		}
 
-		private object GetComparisonValue(PropertyValidatorContext context) {
+		private object GetComparisonValue([NotNull] PropertyValidatorContext context) {
 			if (func != null) {
 				return func(context.Instance);
 			}
@@ -79,7 +83,7 @@ namespace FluentValidation.Validators {
 		public MemberInfo MemberToCompare { get; private set; }
 		public object ValueToCompare { get; private set; }
 
-		protected bool Compare(object comparisonValue, object propertyValue) {
+		protected bool Compare([CanBeNull] object comparisonValue, [CanBeNull] object propertyValue) {
 			if(comparer != null) {
 				return comparer.Equals(comparisonValue, propertyValue);
 			}

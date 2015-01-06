@@ -21,15 +21,17 @@ namespace FluentValidation {
 	using System.Linq;
 	using System.Linq.Expressions;
 	using Internal;
+	using JetBrains.Annotations;
 	using Validators;
 
 	public static class PropertyRuleValidatorExtensions {
 		/// <summary>
 		/// Replace the first validator of this type and remove all the others.
 		/// </summary>
-		public static void ReplaceRule<T>(this IValidator<T> validators,
-		                                  Expression<Func<T, object>> expression,
-		                                  IPropertyValidator newValidator) {
+		public static void ReplaceRule<T>([NotNull] this IValidator<T> validators,
+		                                  [NotNull] Expression<Func<T, object>> expression,
+		                                  [NotNull] IPropertyValidator newValidator)
+		{
 			var property = expression.GetMember();
 			if(property == null) throw new ArgumentException("Property could not be identified", "expression");
 			var type = newValidator.GetType();
@@ -54,8 +56,8 @@ namespace FluentValidation {
 		/// <summary>
 		/// Remove all validators of the specifed type.
 		/// </summary>
-		public static void RemoveRule<T>(this IValidator<T> validators,
-		                                 Expression<Func<T, object>> expression, Type oldValidatorType) {
+		public static void RemoveRule<T>([NotNull] this IValidator<T> validators,
+		                                 [NotNull] Expression<Func<T, object>> expression, [NotNull] Type oldValidatorType) {
 			var property = expression.GetMember();
 			if (property == null) throw new ArgumentException("Property could not be identified", "expression");
 
@@ -71,8 +73,8 @@ namespace FluentValidation {
 		/// <summary>
 		/// Remove all validators for the given property.
 		/// </summary>
-		public static void ClearRules<T>(this IValidator<T> validators,
-		                                 Expression<Func<T, object>> expression) {
+		public static void ClearRules<T>([NotNull] this IValidator<T> validators,
+		                                 [NotNull] Expression<Func<T, object>> expression) {
 			var property = expression.GetMember();
 			if (property == null) throw new ArgumentException("Property could not be identified", "expression");
 

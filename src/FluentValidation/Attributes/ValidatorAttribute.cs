@@ -18,6 +18,7 @@
 
 namespace FluentValidation.Attributes {
 	using System;
+	using JetBrains.Annotations;
 
 	/// <summary>
 	/// Validator attribute to define the class that will describe the Validation rules
@@ -28,12 +29,13 @@ namespace FluentValidation.Attributes {
 		/// <summary>
 		/// The type of the validator used to validate the current type.
 		/// </summary>
+		[NotNull]
 		public Type ValidatorType { get; private set; }
 
 		/// <summary>
 		/// Creates an instance of the ValidatorAttribute allowing a validator type to be specified.
 		/// </summary>
-		public ValidatorAttribute(Type validatorType)
+		public ValidatorAttribute([NotNull] Type validatorType)
 		{
 			ValidatorType = validatorType;
 		}

@@ -22,15 +22,17 @@ namespace FluentValidation {
 	using System.Linq;
 	using System.Linq.Expressions;
 	using Internal;
+	using JetBrains.Annotations;
 	using Validators;
 
 	/// <summary>
 	/// Used for providing metadata about a validator.
 	/// </summary>
 	public class ValidatorDescriptor<T> : IValidatorDescriptor {
+		[NotNull]
 		protected IEnumerable<IValidationRule> Rules { get; private set; }
 
-		public ValidatorDescriptor(IEnumerable<IValidationRule> ruleBuilders) {
+		public ValidatorDescriptor([NotNull] IEnumerable<IValidationRule> ruleBuilders) {
 			Rules = ruleBuilders;
 		}
 
@@ -64,7 +66,8 @@ namespace FluentValidation {
 			return query.ToList();
 		}
 
-		public virtual string GetName(Expression<Func<T, object>> propertyExpression) {
+		[CanBeNull]
+		public virtual string GetName([NotNull] Expression<Func<T, object>> propertyExpression) {
 			var member = propertyExpression.GetMember();
 
 			if (member == null) {
@@ -74,7 +77,8 @@ namespace FluentValidation {
 			return GetName(member.Name);
 		}
 
-		public IEnumerable<IPropertyValidator> GetValidatorsForMember<TValue>(MemberAccessor<T, TValue> accessor)
+		[NotNull]
+		public IEnumerable<IPropertyValidator> GetValidatorsForMember<TValue>([NotNull] MemberAccessor<T, TValue> accessor)
 		{
 			return from rule in Rules.OfType<PropertyRule>()
 			       where Equals(rule.Member, accessor.Member)

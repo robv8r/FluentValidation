@@ -63,6 +63,9 @@
     <Compile Include="..\FluentValidation\Internal\InstanceCache.cs">
       <Link>InstanceCache.cs</Link>
     </Compile>
+    <Compile Include="..\FluentValidation\Internal\JetBrainsCodeAnnotations.cs">
+      <Link>JetBrainsCodeAnnotations.cs</Link>
+    </Compile>
     <Compile Include="..\FluentValidation\Internal\MessageFormatter.cs">
       <Link>MessageFormatter.cs</Link>
     </Compile>

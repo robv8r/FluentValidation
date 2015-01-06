@@ -20,11 +20,13 @@ namespace FluentValidation.Validators {
 	using System.Collections;
 	using Resources;
 	using System.Linq;
+	using JetBrains.Annotations;
 
     public class NotEmptyValidator : PropertyValidator, INotEmptyValidator {
+		[CanBeNull]
 		readonly object defaultValueForType;
 
-		public NotEmptyValidator(object defaultValueForType) : base(() => Messages.notempty_error) {
+		public NotEmptyValidator([CanBeNull] object defaultValueForType) : base(() => Messages.notempty_error) {
 			this.defaultValueForType = defaultValueForType;
 		}
 

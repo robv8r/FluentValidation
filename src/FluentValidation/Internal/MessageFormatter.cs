@@ -1,10 +1,12 @@
 namespace FluentValidation.Internal {
 	using System.Collections.Generic;
+	using JetBrains.Annotations;
 
 	/// <summary>
 	/// Assists in the construction of validation messages.
 	/// </summary>
 	public class MessageFormatter {
+		[NotNull]
 		readonly Dictionary<string, object> placeholderValues = new Dictionary<string, object>();
 		object[] additionalArgs;
 
@@ -19,7 +21,8 @@ namespace FluentValidation.Internal {
 		/// <param name="name"></param>
 		/// <param name="value"></param>
 		/// <returns></returns>
-		public MessageFormatter AppendArgument(string name, object value) {
+		[NotNull]
+		public MessageFormatter AppendArgument([NotNull] string name, object value) {
 			placeholderValues[name] = value;
 			return this;
 		}
@@ -29,6 +32,7 @@ namespace FluentValidation.Internal {
 		/// </summary>
 		/// <param name="name">The name of the property</param>
 		/// <returns></returns>
+		[NotNull]
 		public MessageFormatter AppendPropertyName(string name) {
 			return AppendArgument(PropertyName, name);
 		}
@@ -38,6 +42,7 @@ namespace FluentValidation.Internal {
 		/// </summary>
 		/// <param name="additionalArgs">Additional arguments</param>
 		/// <returns></returns>
+		[NotNull]
 		public MessageFormatter AppendAdditionalArguments(params object[] additionalArgs) {
 			this.additionalArgs = additionalArgs;
 			return this;
@@ -48,7 +53,8 @@ namespace FluentValidation.Internal {
 		/// </summary>
 		/// <param name="messageTemplate">Message template</param>
 		/// <returns>The message with placeholders replaced with their appropriate values</returns>
-		public string BuildMessage(string messageTemplate) {
+		[NotNull]
+		public string BuildMessage([NotNull] string messageTemplate) {
 
 			string result = messageTemplate;
 
@@ -66,7 +72,8 @@ namespace FluentValidation.Internal {
 			get { return additionalArgs != null && additionalArgs.Length > 0; }
 		}
 
-		string ReplacePlaceholderWithValue(string template, string key, object value) {
+		[NotNull]
+		string ReplacePlaceholderWithValue([NotNull] string template, [NotNull] string key, [CanBeNull] object value) {
 			string placeholder = "{" + key + "}";
 			return template.Replace(placeholder, value == null ? null : value.ToString());
 		}

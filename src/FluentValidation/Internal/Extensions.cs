@@ -23,6 +23,7 @@ namespace FluentValidation.Internal {
 	using System.Linq.Expressions;
 	using System.Reflection;
 	using System.Text.RegularExpressions;
+	using JetBrains.Annotations;
 	using Validators;
 
 	/// <summary>
@@ -44,7 +45,8 @@ namespace FluentValidation.Internal {
 		/// <summary>
 		/// Gets a MemberInfo from a member expression.
 		/// </summary>
-		public static MemberInfo GetMember(this LambdaExpression expression) {
+		[CanBeNull]
+		public static MemberInfo GetMember([NotNull] this LambdaExpression expression) {
 			var memberExp = RemoveUnary(expression.Body);
 
 			if (memberExp == null) {
@@ -57,7 +59,9 @@ namespace FluentValidation.Internal {
 		/// <summary>
 		/// Gets a MemberInfo from a member expression.
 		/// </summary>
-		public static MemberInfo GetMember<T, TProperty>(this Expression<Func<T, TProperty>> expression) {
+		[CanBeNull]
+		public static MemberInfo GetMember<T, TProperty>([NotNull] this Expression<Func<T, TProperty>> expression)
+		{
 			var memberExp = RemoveUnary(expression.Body);
 
 			if (memberExp == null) {
@@ -67,7 +71,9 @@ namespace FluentValidation.Internal {
 			return memberExp.Member;
 		}
 
-		private static MemberExpression RemoveUnary(Expression toUnwrap) {
+		[CanBeNull]
+		private static MemberExpression RemoveUnary([NotNull] Expression toUnwrap)
+		{
 			if (toUnwrap is UnaryExpression) {
 				return ((UnaryExpression)toUnwrap).Operand as MemberExpression;
 			}
@@ -79,7 +85,9 @@ namespace FluentValidation.Internal {
 		/// <summary>
 		/// Splits pascal case, so "FooBar" would become "Foo Bar"
 		/// </summary>
-		public static string SplitPascalCase(this string input) {
+		[ContractAnnotation("input:null=>null; input:notnull=>notnull")]
+		public static string SplitPascalCase([CanBeNull] this string input)
+		{
 			if (string.IsNullOrEmpty(input)) {
 				return input;
 			}
@@ -98,21 +106,28 @@ namespace FluentValidation.Internal {
 			return Expression.Lambda<Func<T, TProperty>>(constant, parameter);
 		}
 
-		internal static void ForEach<T>(this IEnumerable<T> source, Action<T> action) {
+		internal static void ForEach<T>([NotNull] this IEnumerable<T> source, [NotNull] Action<T> action)
+		{
 			foreach(var item in source) {
 				action(item);	
 			}
 		}
 
-		public static Func<object, object> CoerceToNonGeneric<T, TProperty>(this Func<T, TProperty> func) {
-			return x => func((T)x);
-		} 
-
-		public static Func<object, bool> CoerceToNonGeneric<T>(this Func<T, bool> func) {
+		[NotNull]
+		public static Func<object, object> CoerceToNonGeneric<T, TProperty>([NotNull] this Func<T, TProperty> func)
+		{
 			return x => func((T)x);
 		}
 
-		public static Action<object> CoerceToNonGeneric<T>(this Action<T> action) {
+		[NotNull]
+		public static Func<object, bool> CoerceToNonGeneric<T>([NotNull] this Func<T, bool> func)
+		{
+			return x => func((T)x);
+		}
+
+		[NotNull]
+		public static Action<object> CoerceToNonGeneric<T>([NotNull] this Action<T> action)
+		{
 			return x => action((T)x);
 		}
 

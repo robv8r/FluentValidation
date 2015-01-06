@@ -21,6 +21,7 @@ namespace FluentValidation {
 	using System.Linq;
 	using System.Linq.Expressions;
 	using Internal;
+	using JetBrains.Annotations;
 	using Resources;
 	using Validators;
 
@@ -34,7 +35,8 @@ namespace FluentValidation {
 		/// If set to 'Stop' then execution of the rule will stop once the first validator in the chain fails.
 		/// If set to 'Continue' then all validators in the chain will execute regardless of failures.
 		/// </summary>
-		public static IRuleBuilderInitial<T, TProperty> Cascade<T, TProperty>(this IRuleBuilderInitial<T, TProperty> ruleBuilder, CascadeMode cascadeMode) {
+		[NotNull]
+		public static IRuleBuilderInitial<T, TProperty> Cascade<T, TProperty>([NotNull] this IRuleBuilderInitial<T, TProperty> ruleBuilder, CascadeMode cascadeMode) {
 			return ruleBuilder.Configure(cfg => {
 				cfg.CascadeMode = cascadeMode;
 			});
@@ -49,7 +51,8 @@ namespace FluentValidation {
 		/// <param name="rule"></param>
 		/// <param name="onFailure"></param>
 		/// <returns></returns>
-		public static IRuleBuilderOptions<T, TProperty> OnAnyFailure<T, TProperty>(this IRuleBuilderOptions<T,TProperty> rule, Action<T> onFailure) {
+		[NotNull]
+		public static IRuleBuilderOptions<T, TProperty> OnAnyFailure<T, TProperty>([NotNull] this IRuleBuilderOptions<T,TProperty> rule, [NotNull] Action<T> onFailure) {
 			return rule.Configure(config => {
 				config.OnFailure = onFailure.CoerceToNonGeneric();
 			});
@@ -61,7 +64,8 @@ namespace FluentValidation {
 		/// <param name="rule">The current rule</param>
 		/// <param name="errorMessage">The error message to use</param>
 		/// <returns></returns>
-		public static IRuleBuilderOptions<T, TProperty> WithMessage<T, TProperty>(this IRuleBuilderOptions<T, TProperty> rule, string errorMessage) {
+		[NotNull]
+		public static IRuleBuilderOptions<T, TProperty> WithMessage<T, TProperty>([NotNull] this IRuleBuilderOptions<T, TProperty> rule, [NotNull] string errorMessage) {
 			return rule.WithMessage(errorMessage, null as object[]);
 		}
 
@@ -72,7 +76,8 @@ namespace FluentValidation {
 		/// <param name="errorMessage">The error message to use</param>
 		/// <param name="formatArgs">Additional arguments to be specified when formatting the custom error message.</param>
 		/// <returns></returns>
-		public static IRuleBuilderOptions<T, TProperty> WithMessage<T, TProperty>(this IRuleBuilderOptions<T, TProperty> rule, string errorMessage, params object[] formatArgs) {
+		[NotNull]
+		public static IRuleBuilderOptions<T, TProperty> WithMessage<T, TProperty>([NotNull] this IRuleBuilderOptions<T, TProperty> rule, [NotNull] string errorMessage, [CanBeNull] params object[] formatArgs) {
 			var funcs = ConvertArrayOfObjectsToArrayOfDelegates<T>(formatArgs);
 			return rule.WithMessage(errorMessage, funcs);
 		}
@@ -84,7 +89,8 @@ namespace FluentValidation {
 		/// <param name="errorMessage">The error message to use</param>
 		/// <param name="funcs">Additional property values to be included when formatting the custom error message.</param>
 		/// <returns></returns>
-		public static IRuleBuilderOptions<T, TProperty> WithMessage<T, TProperty>(this IRuleBuilderOptions<T, TProperty> rule, string errorMessage, params Func<T, object>[] funcs) {
+		[NotNull]
+		public static IRuleBuilderOptions<T, TProperty> WithMessage<T, TProperty>([NotNull] this IRuleBuilderOptions<T, TProperty> rule, [NotNull] string errorMessage, [NotNull] params Func<T, object>[] funcs) {
 			errorMessage.Guard("A message must be specified when calling WithMessage.");
 
 			return rule.Configure(config => {
@@ -103,7 +109,8 @@ namespace FluentValidation {
 		/// <param name="errorMessage">The error message to use</param>
 		/// <param name="funcs">Additional property values to use when formatting the custom error message.</param>
 		/// <returns></returns>
-		public static IRuleBuilderOptions<T, TProperty> WithMessage<T, TProperty>(this IRuleBuilderOptions<T, TProperty> rule, string errorMessage, params Func<T, TProperty, object>[] funcs) {
+		[NotNull]
+		public static IRuleBuilderOptions<T, TProperty> WithMessage<T, TProperty>([NotNull] this IRuleBuilderOptions<T, TProperty> rule, [NotNull] string errorMessage, [NotNull] params Func<T, TProperty, object>[] funcs) {
 			errorMessage.Guard("A message must be specified when calling WithMessage.");
 
 			return rule.Configure(config => {
@@ -121,7 +128,8 @@ namespace FluentValidation {
 		/// <param name="rule">The current rule</param>
 		/// <param name="resourceSelector">The resource to use as an expression, eg () => Messages.MyResource</param>
 		/// <returns></returns>
-		public static IRuleBuilderOptions<T,TProperty> WithLocalizedMessage<T,TProperty>(this IRuleBuilderOptions<T,TProperty> rule, Expression<Func<string>> resourceSelector) {
+		[NotNull]
+		public static IRuleBuilderOptions<T,TProperty> WithLocalizedMessage<T,TProperty>([NotNull] this IRuleBuilderOptions<T,TProperty> rule, [NotNull] Expression<Func<string>> resourceSelector) {
 			// We use the StaticResourceAccessorBuilder here because we don't want calls to WithLocalizedMessage to be overriden by the ResourceProviderType.
 			return rule.WithLocalizedMessage(resourceSelector, new StaticResourceAccessorBuilder());
 		}
@@ -133,7 +141,8 @@ namespace FluentValidation {
 		/// <param name="resourceSelector">The resource to use as an expression, eg () => Messages.MyResource</param>
 		/// <param name="formatArgs">Custom message format args</param>
 		/// <returns></returns>
-		public static IRuleBuilderOptions<T, TProperty> WithLocalizedMessage<T, TProperty>(this IRuleBuilderOptions<T, TProperty> rule, Expression<Func<string>> resourceSelector, params object[] formatArgs) {
+		[NotNull]
+		public static IRuleBuilderOptions<T, TProperty> WithLocalizedMessage<T, TProperty>([NotNull] this IRuleBuilderOptions<T, TProperty> rule, [NotNull] Expression<Func<string>> resourceSelector, [NotNull] params object[] formatArgs) {
 			var funcs = ConvertArrayOfObjectsToArrayOfDelegates<T>(formatArgs);
 			return rule.WithLocalizedMessage(resourceSelector, funcs);
 		}
@@ -145,7 +154,8 @@ namespace FluentValidation {
 		/// <param name="resourceSelector">The resource to use as an expression, eg () => Messages.MyResource</param>
 		/// <param name="formatArgs">Custom message format args</param>
 		/// <returns></returns>
-		public static IRuleBuilderOptions<T, TProperty> WithLocalizedMessage<T, TProperty>(this IRuleBuilderOptions<T, TProperty> rule, Expression<Func<string>> resourceSelector, params Func<T, object>[] formatArgs) {
+		[NotNull]
+		public static IRuleBuilderOptions<T, TProperty> WithLocalizedMessage<T, TProperty>([NotNull] this IRuleBuilderOptions<T, TProperty> rule, [NotNull] Expression<Func<string>> resourceSelector, [NotNull] params Func<T, object>[] formatArgs) {
 			// We use the StaticResourceAccessorBuilder here because we don't want calls to WithLocalizedMessage to be overriden by the ResourceProviderType.
 			return rule.WithLocalizedMessage(resourceSelector, new StaticResourceAccessorBuilder())
 				.Configure(cfg => {
@@ -163,7 +173,8 @@ namespace FluentValidation {
 		/// <param name="resourceSelector">The resource to use as an expression, eg () => Messages.MyResource</param>
 		/// <param name="resourceAccessorBuilder">The resource accessor builder to use. </param>
 		/// <returns></returns>
-		public static IRuleBuilderOptions<T,TProperty> WithLocalizedMessage<T,TProperty>(this IRuleBuilderOptions<T,TProperty> rule, Expression<Func<string>> resourceSelector, IResourceAccessorBuilder resourceAccessorBuilder) {
+		[NotNull]
+		public static IRuleBuilderOptions<T,TProperty> WithLocalizedMessage<T,TProperty>([NotNull] this IRuleBuilderOptions<T,TProperty> rule, [NotNull] Expression<Func<string>> resourceSelector, [NotNull] IResourceAccessorBuilder resourceAccessorBuilder) {
 			resourceSelector.Guard("An expression must be specified when calling WithLocalizedMessage, eg .WithLocalizedMessage(() => Messages.MyResource)");
 		
 			return rule.Configure(config => {
@@ -181,7 +192,8 @@ namespace FluentValidation {
 		/// <param name="predicate">A lambda expression that specifies a condition for when the validator should run</param>
 		/// <param name="applyConditionTo">Whether the condition should be applied to the current rule or all rules in the chain</param>
 		/// <returns></returns>
-		public static IRuleBuilderOptions<T, TProperty> When<T,TProperty>(this IRuleBuilderOptions<T, TProperty> rule, Func<T, bool> predicate, ApplyConditionTo applyConditionTo = ApplyConditionTo.AllValidators) {
+		[NotNull]
+		public static IRuleBuilderOptions<T, TProperty> When<T,TProperty>([NotNull] this IRuleBuilderOptions<T, TProperty> rule, [NotNull] Func<T, bool> predicate, ApplyConditionTo applyConditionTo = ApplyConditionTo.AllValidators) {
 			predicate.Guard("A predicate must be specified when calling When.");
 			// Default behaviour for When/Unless as of v1.3 is to apply the condition to all previous validators in the chain.
 			return rule.Configure(config => {
@@ -197,7 +209,8 @@ namespace FluentValidation {
 		/// <param name="predicate">A lambda expression that specifies a condition for when the validator should not run</param>
 		/// <param name="applyConditionTo">Whether the condition should be applied to the current rule or all rules in the chain</param>
 		/// <returns></returns>
-		public static IRuleBuilderOptions<T, TProperty> Unless<T, TProperty>(this IRuleBuilderOptions<T, TProperty> rule, Func<T, bool> predicate, ApplyConditionTo applyConditionTo = ApplyConditionTo.AllValidators) {
+		[NotNull]
+		public static IRuleBuilderOptions<T, TProperty> Unless<T, TProperty>([NotNull] this IRuleBuilderOptions<T, TProperty> rule, [NotNull] Func<T, bool> predicate, ApplyConditionTo applyConditionTo = ApplyConditionTo.AllValidators) {
 			predicate.Guard("A predicate must be specified when calling Unless");
 			return rule.When(x => !predicate(x), applyConditionTo);
 		}
@@ -209,7 +222,8 @@ namespace FluentValidation {
 		/// <param name="rule">The current rule</param>
 		/// <param name="overridePropertyName">The property name to use</param>
 		/// <returns></returns>
-		public static IRuleBuilderOptions<T, TProperty> WithName<T, TProperty>(this IRuleBuilderOptions<T, TProperty> rule, string overridePropertyName) {
+		[NotNull]
+		public static IRuleBuilderOptions<T, TProperty> WithName<T, TProperty>([NotNull] this IRuleBuilderOptions<T, TProperty> rule, [NotNull] string overridePropertyName) {
 			overridePropertyName.Guard("A property name must be specified when calling WithName.");
 			return rule.Configure(config => {
 				config.DisplayName = new StaticStringSource(overridePropertyName);	
@@ -222,7 +236,8 @@ namespace FluentValidation {
 		/// <param name="rule">The current rule</param>
 		/// <param name="resourceSelector">The resource to use as an expression, eg () => Messages.MyResource</param>
 		/// <param name="resourceAccessorBuilder">Resource accessor builder to use</param>
-		public static IRuleBuilderOptions<T, TProperty> WithLocalizedName<T,TProperty>(this IRuleBuilderOptions<T,TProperty> rule, Expression<Func<string>> resourceSelector, IResourceAccessorBuilder resourceAccessorBuilder = null) {
+		[NotNull]
+		public static IRuleBuilderOptions<T, TProperty> WithLocalizedName<T,TProperty>([NotNull] this IRuleBuilderOptions<T,TProperty> rule, [NotNull] Expression<Func<string>> resourceSelector, [CanBeNull] IResourceAccessorBuilder resourceAccessorBuilder = null) {
 			resourceSelector.Guard("A resource selector must be specified.");
 			// default to the static resource accessor builder - explicit resources configured with WithLocalizedName should take precedence over ResourceProviderType.
 			resourceAccessorBuilder = resourceAccessorBuilder ?? new StaticResourceAccessorBuilder();
@@ -239,7 +254,8 @@ namespace FluentValidation {
 		/// <param name="rule">The current rule</param>
 		/// <param name="propertyName">The property name to use</param>
 		/// <returns></returns>
-		public static IRuleBuilderOptions<T, TProperty> OverridePropertyName<T, TProperty>(this IRuleBuilderOptions<T, TProperty> rule, string propertyName) {
+		[NotNull]
+		public static IRuleBuilderOptions<T, TProperty> OverridePropertyName<T, TProperty>([NotNull] this IRuleBuilderOptions<T, TProperty> rule, [NotNull] string propertyName) {
 			propertyName.Guard("A property name must be specified when calling WithNamePropertyName.");
 			return rule.Configure(config => config.PropertyName = propertyName);
 		}
@@ -251,8 +267,9 @@ namespace FluentValidation {
 		/// <param name="rule">The current rule</param>
 		/// <param name="propertyName">The property name to use</param>
 		/// <returns></returns>
+		[NotNull]
 		[Obsolete("WithPropertyName has been deprecated. If you wish to set the name of the property within the error message, use 'WithName'. If you actually intended to change which property this rule was declared against, use 'OverridePropertyName' instead.")]
-		public static IRuleBuilderOptions<T, TProperty> WithPropertyName<T, TProperty>(this IRuleBuilderOptions<T, TProperty> rule, string propertyName) {
+		public static IRuleBuilderOptions<T, TProperty> WithPropertyName<T, TProperty>([NotNull] this IRuleBuilderOptions<T, TProperty> rule, [NotNull] string propertyName) {
 			return rule.OverridePropertyName(propertyName);
 		}
 
@@ -264,12 +281,14 @@ namespace FluentValidation {
 		/// <param name="rule"></param>
 		/// <param name="stateProvider"></param>
 		/// <returns></returns>
-		public static IRuleBuilderOptions<T, TProperty> WithState<T, TProperty>(this IRuleBuilderOptions<T, TProperty> rule, Func<T, object> stateProvider) {
+		[NotNull]
+		public static IRuleBuilderOptions<T, TProperty> WithState<T, TProperty>([NotNull] this IRuleBuilderOptions<T, TProperty> rule, [NotNull] Func<T, object> stateProvider) {
 			stateProvider.Guard("A lambda expression must be passed to WithState");
 			return rule.Configure(config => config.CurrentValidator.CustomStateProvider = stateProvider.CoerceToNonGeneric());
 		}
 
-		static Func<T, object>[] ConvertArrayOfObjectsToArrayOfDelegates<T>(object[] objects) {
+		[NotNull]
+		static Func<T, object>[] ConvertArrayOfObjectsToArrayOfDelegates<T>([CanBeNull] object[] objects) {
 			if(objects == null || objects.Length == 0) {
 				return new Func<T, object>[0];
 			}

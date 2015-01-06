@@ -21,13 +21,14 @@ namespace FluentValidation.Validators {
 	using System.Reflection;
 	using Attributes;
 	using Internal;
+	using JetBrains.Annotations;
 	using Resources;
 
 	public class GreaterThanValidator : AbstractComparisonValidator {
-		public GreaterThanValidator(IComparable value) : base(value, () => Messages.greaterthan_error) {
+		public GreaterThanValidator([NotNull] IComparable value) : base(value, () => Messages.greaterthan_error) {
 		}
 
-		public GreaterThanValidator(Func<object, object> valueToCompareFunc, MemberInfo member)
+		public GreaterThanValidator([NotNull] Func<object, object> valueToCompareFunc, [NotNull] MemberInfo member)
 			: base(valueToCompareFunc, member, () => Messages.greaterthan_error) {
 		}
 

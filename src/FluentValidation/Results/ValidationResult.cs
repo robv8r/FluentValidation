@@ -20,17 +20,20 @@ namespace FluentValidation.Results {
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
+	using JetBrains.Annotations;
 
 #if !SILVERLIGHT && !PORTABLE
 	[Serializable]
 #endif
 	public class ValidationResult {
+		[NotNull]
 		private readonly List<ValidationFailure> errors = new List<ValidationFailure>();
 
 		public virtual bool IsValid {
 			get { return Errors.Count == 0; }
 		}
 
+		[NotNull]
 		public IList<ValidationFailure> Errors {
 			get { return errors; }
 		}
@@ -38,7 +41,7 @@ namespace FluentValidation.Results {
 		public ValidationResult() {
 		}
 
-		public ValidationResult(IEnumerable<ValidationFailure> failures) {
+		public ValidationResult([NotNull] IEnumerable<ValidationFailure> failures) {
 			errors.AddRange(failures.Where(failure => failure != null));
 		}
 	}

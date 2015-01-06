@@ -18,6 +18,7 @@
 
 namespace FluentValidation.Results {
 	using System;
+	using JetBrains.Annotations;
 
 #if !SILVERLIGHT && !PORTABLE
 	[Serializable]
@@ -30,13 +31,13 @@ namespace FluentValidation.Results {
 		/// <summary>
 		/// Creates a new validation failure.
 		/// </summary>
-		public ValidationFailure(string propertyName, string error) : this(propertyName, error, null) {
+		public ValidationFailure([NotNull] string propertyName, [NotNull] string error) : this(propertyName, error, null) {
 		}
 
 		/// <summary>
 		/// Creates a new ValidationFailure.
 		/// </summary>
-		public ValidationFailure(string propertyName, string error, object attemptedValue) {
+		public ValidationFailure([NotNull] string propertyName, [NotNull] string error, [CanBeNull] object attemptedValue) {
 			PropertyName = propertyName;
 			ErrorMessage = error;
 			AttemptedValue = attemptedValue;
@@ -45,21 +46,25 @@ namespace FluentValidation.Results {
 		/// <summary>
 		/// The name of the property.
 		/// </summary>
+		[NotNull]
 		public string PropertyName { get; private set; }
 		
 		/// <summary>
 		/// The error message
 		/// </summary>
+		[NotNull]
 		public string ErrorMessage { get; private set; }
 		
 		/// <summary>
 		/// The property value that caused the failure.
 		/// </summary>
+		[CanBeNull]
 		public object AttemptedValue { get; private set; }
 		
 		/// <summary>
 		/// Custom state associated with the failure.
 		/// </summary>
+		[CanBeNull]
 		public object CustomState { get; set; }
 
 		/// <summary>

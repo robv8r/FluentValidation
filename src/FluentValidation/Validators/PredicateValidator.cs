@@ -20,15 +20,17 @@ namespace FluentValidation.Validators {
 	using System;
 	using Attributes;
 	using Internal;
+	using JetBrains.Annotations;
 	using Resources;
 	using Results;
 
 	public class PredicateValidator : PropertyValidator, IPredicateValidator {
-        public delegate bool Predicate(object instanceToValidate, object propertyValue, PropertyValidatorContext propertyValidatorContext);
+        public delegate bool Predicate([CanBeNull] object instanceToValidate, [CanBeNull] object propertyValue, [NotNull] PropertyValidatorContext propertyValidatorContext);
 
+		[NotNull]
 		private readonly Predicate predicate;
 
-		public PredicateValidator(Predicate predicate) : base(() => Messages.predicate_error) {
+		public PredicateValidator([NotNull] Predicate predicate) : base(() => Messages.predicate_error) {
 			predicate.Guard("A predicate must be specified.");
 			this.predicate = predicate;
 		}
