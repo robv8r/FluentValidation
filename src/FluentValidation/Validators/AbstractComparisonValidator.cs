@@ -35,7 +35,7 @@ namespace FluentValidation.Validators {
 			ValueToCompare = value;
 		}
 
-		protected AbstractComparisonValidator([NotNull] Func<object, object> valueToCompareFunc, [NotNull] MemberInfo member, [NotNull] Expression<Func<string>> errorMessageSelector)
+		protected AbstractComparisonValidator([NotNull] Func<object, object> valueToCompareFunc, [CanBeNull] MemberInfo member, [NotNull] Expression<Func<string>> errorMessageSelector)
 			: base(errorMessageSelector) {
 			this.valueToCompareFunc = valueToCompareFunc;
 			this.MemberToCompare = member;

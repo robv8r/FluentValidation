@@ -21,17 +21,19 @@ namespace FluentValidation.Internal {
 	using System.Collections.Generic;
 	using System.Linq;
 	using System.Linq.Expressions;
+	using JetBrains.Annotations;
 
 	/// <summary>
 	/// Selects validators that are associated with a particular property.
 	/// </summary>
 	public class MemberNameValidatorSelector : IValidatorSelector {
+		[NotNull]
 		readonly IEnumerable<string> memberNames;
 
 		/// <summary>
 		/// Creates a new instance of MemberNameValidatorSelector.
 		/// </summary>
-		public MemberNameValidatorSelector(IEnumerable<string> memberNames) {
+		public MemberNameValidatorSelector([NotNull] IEnumerable<string> memberNames) {
 			this.memberNames = memberNames;
 		}
 
@@ -42,7 +44,7 @@ namespace FluentValidation.Internal {
 		/// <param name="propertyPath">Property path (eg Customer.Address.Line1)</param>
 		/// <param name="context">Contextual information</param>
 		/// <returns>Whether or not the validator can execute.</returns>
-		public bool CanExecute (IValidationRule rule, string propertyPath, ValidationContext context) {
+		public bool CanExecute (IValidationRule rule, [NotNull] string propertyPath, [NotNull] ValidationContext context) {
 			// Validator selector only applies to the top level.
  			// If we're running in a child context then this means that the child validator has already been selected
 			// Because of this, we assume that the rule should continue (ie if the parent rule is valid, all children are valid)
@@ -52,7 +54,8 @@ namespace FluentValidation.Internal {
 		///<summary>
 		/// Creates a MemberNameValidatorSelector from a collection of expressions.
 		///</summary>
-		public static MemberNameValidatorSelector FromExpressions<T>(params Expression<Func<T, object>>[] propertyExpressions) {
+		[NotNull]
+		public static MemberNameValidatorSelector FromExpressions<T>([NotNull] params Expression<Func<T, object>>[] propertyExpressions) {
 			var members = propertyExpressions.Select(MemberFromExpression).ToList();
 			return new MemberNameValidatorSelector(members);
 		}

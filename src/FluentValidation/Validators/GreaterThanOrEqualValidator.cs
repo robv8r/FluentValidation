@@ -27,7 +27,7 @@ namespace FluentValidation.Validators {
 		public GreaterThanOrEqualValidator([NotNull] IComparable value) : base(value, () => Messages.greaterthanorequal_error) {
 		}
 
-		public GreaterThanOrEqualValidator([NotNull] Func<object, object> valueToCompareFunc, [NotNull] MemberInfo member)
+		public GreaterThanOrEqualValidator([NotNull] Func<object, object> valueToCompareFunc, [CanBeNull] MemberInfo member)
 			: base(valueToCompareFunc, member, () => Messages.greaterthanorequal_error) {
 		}
 

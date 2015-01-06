@@ -29,7 +29,7 @@ namespace FluentValidation.Validators {
 		public LessThanValidator([NotNull] IComparable value) : base(value, () => Messages.lessthan_error) {
 		}
 
-		public LessThanValidator([NotNull] Func<object, object> valueToCompareFunc, [NotNull] MemberInfo member)
+		public LessThanValidator([NotNull] Func<object, object> valueToCompareFunc, [CanBeNull] MemberInfo member)
 			: base(valueToCompareFunc, member, () => Messages.lessthan_error) {
 		}
 

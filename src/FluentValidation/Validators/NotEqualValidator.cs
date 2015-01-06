@@ -32,13 +32,13 @@ namespace FluentValidation.Validators {
 		[CanBeNull]
 		readonly Func<object, object> func;
 
-		public NotEqualValidator([NotNull] Func<object, object> func, [NotNull] MemberInfo memberToCompare)
+		public NotEqualValidator([NotNull] Func<object, object> func, [CanBeNull] MemberInfo memberToCompare)
 			: base(() => Messages.notequal_error) {
 			this.func = func;
 			MemberToCompare = memberToCompare;
 		}
 
-		public NotEqualValidator([NotNull] Func<object, object> func, MemberInfo memberToCompare, [NotNull] IEqualityComparer equalityComparer)
+		public NotEqualValidator([NotNull] Func<object, object> func, MemberInfo memberToCompare, [CanBeNull] IEqualityComparer equalityComparer)
 			: base(() => Messages.notequal_error) {
 			this.func = func;
 			this.comparer = equalityComparer;
@@ -50,7 +50,7 @@ namespace FluentValidation.Validators {
 			ValueToCompare = comparisonValue;
 		}
 
-		public NotEqualValidator([CanBeNull] object comparisonValue, [NotNull] IEqualityComparer equalityComparer)
+		public NotEqualValidator([CanBeNull] object comparisonValue, [CanBeNull] IEqualityComparer equalityComparer)
 			: base(() => Messages.notequal_error) {
 			ValueToCompare = comparisonValue;
 			comparer = equalityComparer;

@@ -35,7 +35,7 @@ namespace FluentValidation.Validators {
 			this.ValueToCompare = valueToCompare;
 		}
 
-		public EqualValidator([CanBeNull] object valueToCompare, [NotNull] IEqualityComparer comparer)
+		public EqualValidator([CanBeNull] object valueToCompare, [CanBeNull] IEqualityComparer comparer)
 			: base(() => Messages.equal_error) {
 			ValueToCompare = valueToCompare;
 			this.comparer = comparer;
